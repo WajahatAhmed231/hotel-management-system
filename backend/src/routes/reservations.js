@@ -1,0 +1,13 @@
+const express = require('express');
+const router = express.Router();
+const { getReservations, getReservation, createReservation, updateReservation, checkIn, checkOut, getTodayActivity } = require('../controllers/reservationController');
+const { authenticate, authorize } = require('../middleware/auth');
+router.use(authenticate);
+router.get('/today', getTodayActivity);
+router.get('/', getReservations);
+router.get('/:id', getReservation);
+router.post('/', authorize('admin','receptionist','manager'), createReservation);
+router.put('/:id', authorize('admin','receptionist','manager'), updateReservation);
+router.post('/:id/checkin', authorize('admin','receptionist'), checkIn);
+router.post('/:id/checkout', authorize('admin','receptionist'), checkOut);
+module.exports = router;

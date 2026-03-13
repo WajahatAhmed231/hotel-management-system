@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const { createInvoice, getInvoice, getInvoices, recordPayment } = require('../controllers/billingController');
+const { authenticate, authorize } = require('../middleware/auth');
+router.use(authenticate);
+router.get('/invoices', getInvoices);
+router.get('/invoices/:id', getInvoice);
+router.post('/invoices', authorize('admin','receptionist','manager'), createInvoice);
+router.post('/payments', authorize('admin','receptionist'), recordPayment);
+module.exports = router;
